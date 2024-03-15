@@ -1,4 +1,4 @@
-namespace Projeto02.Models
+namespace ProjetoTPTE2.Models
 {
     public class Produto
     {

@@ -1,18 +1,25 @@
-using Microsoft.OpenApi.Models;
+using ProjetoTPTE2.Data;
+using Microsoft.EntityFrameworkCore;
 
-var produtos = new List<Projeto02.Models.Produto>
+var produtos = new List<ProjetoTPTE2.Models.Produto>
 {
-    new Projeto02.Models.Produto("Fone de ouvido", "Fone de ouvido preto", 19.99, 100, 1),
-    new Projeto02.Models.Produto("Capinha de smartphone", "Capinha de smartphone transparente", 15, 150, 2),
-    new Projeto02.Models.Produto("Carregador", "Carregador rápido", 30.99, 70, 3)
+    new ProjetoTPTE2.Models.Produto("Fone de ouvido", "Fone de ouvido preto", 19.99, 100, 1),
+    new ProjetoTPTE2.Models.Produto("Capinha de smartphone", "Capinha de smartphone transparente", 15, 150, 2),
+    new ProjetoTPTE2.Models.Produto("Carregador", "Carregador rápido", 30.99, 70, 3)
 };
 
 int maiorId = produtos.Max(p => p.Id);
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddDbContext<ProdutoContext>(
+    opt => opt.UseMySQL()
+);
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddDbContext<ProdutoContext>(options =>
+    options.UseMySql(builder.Configuration.GetConnectionString("DefaultConnection"), new MySqlServerVersion(new Version(8, 0, 26))));
 
 var app = builder.Build();
 
@@ -25,22 +32,22 @@ if (app.Environment.IsDevelopment())
 app.MapGet("/produtos", () => produtos);
 
 app.MapGet("/produtos/{id}", (int id) =>
-    produtos.FirstOrDefault(p => p.Id == id) is Projeto02.Models.Produto produto 
+    produtos.FirstOrDefault(p => p.Id == id) is ProjetoTPTE2.Models.Produto produto 
     ? Results.Ok(produto) 
     : Results.NotFound());
 
-app.MapPost("/produtos", (Projeto02.Models.ProdutoDto produtodto) =>
+app.MapPost("/produtos", (ProjetoTPTE2.Models.ProdutoDto produtodto) =>
 {
     maiorId++;
     int novoId = maiorId;
 
-    var novoProduto = new Projeto02.Models.Produto(produtodto.Nome, produtodto.Descricao, produtodto.Preco, produtodto.Estoque, novoId);
+    var novoProduto = new ProjetoTPTE2.Models.Produto(produtodto.Nome, produtodto.Descricao, produtodto.Preco, produtodto.Estoque, novoId);
 
     produtos.Add(novoProduto);
     return Results.Created($"/produtos/{novoProduto.Id}", novoProduto);
 });
 
-app.MapPut("/produtos/{id}", (int id, Projeto02.Models.ProdutoDto produtodto) =>
+app.MapPut("/produtos/{id}", (int id, ProjetoTPTE2.Models.ProdutoDto produtodto) =>
 {
     var produto = produtos.FirstOrDefault(p => p.Id == id);
 
@@ -74,3 +81,4 @@ app.MapDelete("/produtos/{id}", (int id) =>
 
 app.Run();
 
+    
