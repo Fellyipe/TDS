@@ -1,23 +1,15 @@
 using ProjetoTPTE2.Data;
 using Microsoft.EntityFrameworkCore;
 
-var produtos = new List<ProjetoTPTE2.Models.Produto>
-{
-    new ProjetoTPTE2.Models.Produto("Fone de ouvido", "Fone de ouvido preto", 19.99, 100, 1),
-    new ProjetoTPTE2.Models.Produto("Capinha de smartphone", "Capinha de smartphone transparente", 15, 150, 2),
-    new ProjetoTPTE2.Models.Produto("Carregador", "Carregador rápido", 30.99, 70, 3)
-};
-
-int maiorId = produtos.Max(p => p.Id);
-
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddDbContext<ProdutoContext>(
+/*builder.Services.AddDbContext<ProdutoContext>(
     opt => opt.UseMySQL()
-);
+);*/
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddControllers();
 builder.Services.AddDbContext<ProdutoContext>(options =>
     options.UseMySql(builder.Configuration.GetConnectionString("DefaultConnection"), new MySqlServerVersion(new Version(8, 0, 26))));
 
@@ -29,7 +21,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.MapGet("/produtos", () => produtos);
+app.UseHttpsRedirection();
+app.MapControllers();
+
+/*app.MapGet("/produtos", () => produtos);
 
 app.MapGet("/produtos/{id}", (int id) =>
     produtos.FirstOrDefault(p => p.Id == id) is ProjetoTPTE2.Models.Produto produto 
@@ -77,7 +72,7 @@ app.MapDelete("/produtos/{id}", (int id) =>
     {
         return Results.NotFound();
     }
-});
+});*/
 
 app.Run();
 
