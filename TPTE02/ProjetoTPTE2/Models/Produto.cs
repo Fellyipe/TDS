@@ -7,16 +7,14 @@ namespace ProjetoTPTE2.Models
         [Key]
         public int ProdutoId { get; set; }
         public string Nome { get; set; } = "";
-        public string Descricao { get; set; } = "";
-        public double Preco { get; set; }
-        public int Estoque { get; set; }
+        public decimal Preco { get; set; }
+        public int Quantidade { get; set; }
 
-        public Produto(string nome, string descricao, double preco, int estoque)
+        public Produto(string nome, decimal preco, int quantidade)
         {
             Nome = nome;
-            Descricao = descricao;
             Preco = preco;
-            Estoque = estoque;
+            Quantidade = quantidade;
         }
     }
 }

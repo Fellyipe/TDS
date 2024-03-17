@@ -18,7 +18,7 @@ namespace ProjetoTPTE2.Controllers
         [HttpPost("/")]
         public IActionResult Post([FromBody] ProdutoDto produtoDto, [FromServices] ProdutoContext produtoContext)
         {
-            var novoProduto = new Produto(produtoDto.Nome, produtoDto.Descricao, produtoDto.Preco, produtoDto.Estoque);
+            var novoProduto = new Produto(produtoDto.Nome, produtoDto.Preco, produtoDto.Quantidade);
             produtoContext.Produtos!.Add(novoProduto);
             produtoContext.SaveChanges();
             return Created($"/{novoProduto.ProdutoId}", novoProduto);
@@ -44,9 +44,8 @@ namespace ProjetoTPTE2.Controllers
             }
 
             model.Nome = produtoDto.Nome;
-            model.Descricao = produtoDto.Descricao;
             model.Preco = produtoDto.Preco;
-            model.Estoque = produtoDto.Estoque;
+            model.Quantidade = produtoDto.Quantidade;
 
             produtoContext.Produtos!.Update(model);
             produtoContext.SaveChanges();
