@@ -1,4 +1,4 @@
-#GreenThumb
+# GreenThumb
 
 ***Esse é repositório do projeto final da disciplina de Tecnologia em Desenvolvimento de Sistemas***
 
