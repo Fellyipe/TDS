@@ -1,0 +1,27 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background-color: #4CAF50;
+}
+
+.logo h1 {
+    color: white;
+    margin: 0;
+}
+
+.navigation ul {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+}
+
+.navigation ul li a {
+    color: white;
+    text-decoration: none;
+}
+
+.navigation ul li a:hover {
+    text-decoration: underline;
+}

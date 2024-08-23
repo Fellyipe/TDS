@@ -1,0 +1,22 @@
+.plant-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 16px;
+    text-align: center;
+    background-color: #f9f9f9;
+}
+
+.plant-image {
+    width: 100%;
+    border-radius: 8px;
+}
+
+.plant-card h2 {
+    font-size: 24px;
+    margin: 10px 0;
+}
+
+.plant-card p {
+    font-size: 16px;
+    color: #666;
+}
