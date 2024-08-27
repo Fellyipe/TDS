@@ -6,4 +6,4 @@ GreenThumb é um aplicativo simples para ajudar os usuários a cuidar de suas pl
 
 
 
-Feito com Node.js e React
+Feito com Node.js, React, Express e MongoDB
