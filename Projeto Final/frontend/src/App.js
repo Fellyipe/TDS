@@ -8,6 +8,8 @@ import Home from './pages/Home';
 import Dashboard from './pages/Dashboard';
 import DetalhesPlantas from './pages/DetalhesPlantas';
 import Configuracoes from './pages/Configuracoes';
+import PlantList from './components/PlantList';
+import PlantForm from './components/PlantForm';
 
 function App() {
   return (
@@ -20,6 +22,8 @@ function App() {
                   <Route path="/plant/:id" component={DetalhesPlantas} />
                   <Route path="/configuracoes" component={Configuracoes} />
               </Routes>
+              <PlantForm />
+              <PlantList />
           </main>
           <Footer />
       </Router>
