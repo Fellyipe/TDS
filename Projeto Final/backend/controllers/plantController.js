@@ -1,16 +1,16 @@
 const Plant = require('../models/plantModel');
 
-// Obter todas as plantas
+// Obter todas as plantas do usuário autenticado
 exports.getAllPlants = async (req, res) => {
     try {
-        const plants = await Plant.find();
+        const plants = await Plant.find({ user: req.user.id });  // Filtrar plantas por usuário
         res.json(plants);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
 };
 
-// Criar uma nova planta
+// Criar uma nova planta para o usuário autenticado
 exports.createPlant = async (req, res) => {
     const { name, lastWatered } = req.body;
 
@@ -18,6 +18,7 @@ exports.createPlant = async (req, res) => {
         const newPlant = new Plant({
             name,
             lastWatered,
+            user: req.user.id  // Associar planta ao usuário
         });
 
         const savedPlant = await newPlant.save();
@@ -27,20 +28,20 @@ exports.createPlant = async (req, res) => {
     }
 };
 
-// Atualizar uma planta
+// Atualizar uma planta do usuário autenticado
 exports.updatePlant = async (req, res) => {
     const { id } = req.params;
     const { name, lastWatered } = req.body;
 
     try {
-        const updatedPlant = await Plant.findByIdAndUpdate(
-            id,
+        const updatedPlant = await Plant.findOneAndUpdate(
+            { _id: id, user: req.user.id },  // Verificar se a planta pertence ao usuário
             { name, lastWatered },
             { new: true, runValidators: true }
         );
 
         if (!updatedPlant) {
-            return res.status(404).json({ message: 'Planta não encontrada' });
+            return res.status(404).json({ message: 'Planta não encontrada ou não pertence ao usuário' });
         }
 
         res.json(updatedPlant);
@@ -49,15 +50,15 @@ exports.updatePlant = async (req, res) => {
     }
 };
 
-// Excluir uma planta
+// Excluir uma planta do usuário autenticado
 exports.deletePlant = async (req, res) => {
     const { id } = req.params;
 
     try {
-        const deletedPlant = await Plant.findByIdAndDelete(id);
+        const deletedPlant = await Plant.findOneAndDelete({ _id: id, user: req.user.id });  // Verificar se a planta pertence ao usuário
 
         if (!deletedPlant) {
-            return res.status(404).json({ message: 'Planta não encontrada' });
+            return res.status(404).json({ message: 'Planta não encontrada ou não pertence ao usuário' });
         }
 
         res.json({ message: 'Planta removida com sucesso' });
@@ -66,12 +67,15 @@ exports.deletePlant = async (req, res) => {
     }
 };
 
-// Função para buscar plantas por nome
+// Buscar plantas por nome do usuário autenticado
 exports.getPlantsByName = async (req, res) => {
     const { name } = req.query;
 
     try {
-        const plants = await Plant.find({ name: { $regex: name, $options: 'i' } });
+        const plants = await Plant.find({
+            name: { $regex: name, $options: 'i' },
+            user: req.user.id  // Filtrar plantas por usuário
+        });
         res.json(plants);
     } catch (error) {
         res.status(500).json({ message: error.message });
