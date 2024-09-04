@@ -1,16 +1,37 @@
-import React, { useState } from 'react';
-import { addPlant } from '../api';
+import React, { useState, useEffect } from 'react';
+import { addPlant, updatePlant } from '../api';
 
-const PlantForm = () => {
+const PlantForm = ({ onPlantAdded, plantToEdit, onCancelEdit }) => {
     const [name, setName] = useState('');
     const [lastWatered, setLastWatered] = useState('');
 
+    useEffect(() => {
+        if (plantToEdit) {
+            setName(plantToEdit.name);
+            setLastWatered(plantToEdit.lastWatered);
+        } else {
+            setName('');
+            setLastWatered('');
+        }
+    }, [plantToEdit]);
+
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const newPlant = { name, lastWatered };
-        await addPlant(newPlant);
-        setName('');
-        setLastWatered('');
+        const plantData = { name, lastWatered };
+        
+        try {
+            if (plantToEdit) {
+                await updatePlant(plantToEdit._id, plantData);
+            } else {
+                await addPlant(plantData);
+            }
+            setName('');
+            setLastWatered('');
+            onPlantAdded();
+            onCancelEdit();  // Limpa a planta em edição após sucesso
+        } catch (error) {
+            console.error('Erro ao adicionar/atualizar planta:', error);
+        }
     };
 
     return (
@@ -31,7 +52,8 @@ const PlantForm = () => {
                     onChange={(e) => setLastWatered(e.target.value)}
                 />
             </div>
-            <button type="submit">Adicionar Planta</button>
+            <button type="submit">{plantToEdit ? 'Atualizar Planta' : 'Adicionar Planta'}</button>
+            {plantToEdit && <button type="button" onClick={onCancelEdit}>Cancelar</button>}
         </form>
     );
 };

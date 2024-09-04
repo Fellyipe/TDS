@@ -1,4 +1,5 @@
 const Plant = require('../models/plantModel');
+const checkPlantsNeedingWatering = require('../checkWatering');
 
 // Obter todas as plantas do usuário autenticado
 exports.getAllPlants = async (req, res) => {
@@ -79,5 +80,15 @@ exports.getPlantsByName = async (req, res) => {
         res.json(plants);
     } catch (error) {
         res.status(500).json({ message: error.message });
+    }
+};
+
+
+exports.checkWatering = async (req, res) => {
+    try {
+        const plantsNeedingWater = await checkPlantsNeedingWatering();
+        res.json(plantsNeedingWater);
+    } catch (error) {
+        res.status(500).json({ message: 'Erro ao verificar plantas' });
     }
 };

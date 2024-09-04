@@ -5,7 +5,12 @@ const API_URL = 'http://localhost:5000/api/plants';
 // Função para obter todas as plantas
 export const fetchPlants = async () => {
     try {
-        const response = await axios.get(API_URL);
+        const token = localStorage.getItem('token');
+        const response = await axios.get(API_URL, {
+            headers: {
+                'x-auth-token': token,
+            },
+        });
         return response.data;
     } catch (error) {
         console.error('Erro ao buscar plantas:', error);
@@ -13,10 +18,21 @@ export const fetchPlants = async () => {
     }
 };
 
+// As outras funções (addPlant, updatePlant, deletePlant) também deveriam ter
+// o cabeçalho de autorização conforme necessário, similar ao exemplo acima.
+
+
 // Função para adicionar uma nova planta
 export const addPlant = async (plant) => {
     try {
-        const response = await axios.post(API_URL, plant);
+        const token = localStorage.getItem('token');
+        console.log(localStorage.getItem('token'));
+
+        const response = await axios.post(API_URL, plant, {
+            headers: {
+                'x-auth-token': token,
+            },
+        });
         return response.data;
     } catch (error) {
         console.error('Erro ao adicionar planta:', error);
@@ -27,7 +43,12 @@ export const addPlant = async (plant) => {
 // Função para atualizar uma planta
 export const updatePlant = async (id, plant) => {
     try {
-        const response = await axios.put(`${API_URL}/${id}`, plant);
+        const token = localStorage.getItem('token');
+        const response = await axios.put(`${API_URL}/${id}`, plant, {
+            headers: {
+                'x-auth-token': token,
+            },
+        });
         return response.data;
     } catch (error) {
         console.error('Erro ao atualizar planta:', error);
@@ -38,7 +59,12 @@ export const updatePlant = async (id, plant) => {
 // Função para deletar uma planta
 export const deletePlant = async (id) => {
     try {
-        await axios.delete(`${API_URL}/${id}`);
+        const token = localStorage.getItem('token');
+        await axios.delete(`${API_URL}/${id}`, {
+            headers: {
+                'x-auth-token': token,
+            },
+        });
     } catch (error) {
         console.error('Erro ao deletar planta:', error);
         throw error;

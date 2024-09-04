@@ -1,12 +1,13 @@
 import React from 'react';
-import '../assets/plantcard.css'; // Opcional: Para adicionar estilo específico ao cartão
+import '../assets/plantcard.css';
 
-function PlantCard({ name, lastWatered, image }) {
+function PlantCard({ id, name, lastWatered, onEdit, onDelete }) {
     return (
         <div className="plant-card">
-            <img src={image} alt={name} className="plant-image" />
             <h2>{name}</h2>
-            <p>Última rega: {lastWatered}</p>
+            <p>Última Rega: {lastWatered}</p>
+            <button onClick={onEdit}>Editar</button>
+            <button onClick={onDelete}>Excluir</button>
         </div>
     );
 }
