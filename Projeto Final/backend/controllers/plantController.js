@@ -1,5 +1,5 @@
+const { addDays, format } = require('date-fns');
 const Plant = require('../models/plantModel');
-const checkPlantsNeedingWatering = require('../checkWatering');
 
 // Obter todas as plantas do usuário autenticado
 exports.getAllPlants = async (req, res) => {
@@ -13,12 +13,19 @@ exports.getAllPlants = async (req, res) => {
 
 // Criar uma nova planta para o usuário autenticado
 exports.createPlant = async (req, res) => {
-    const { name, lastWatered } = req.body;
-
+    const { name, lastWatered, wateringFrequency } = req.body;
+    
     try {
+        
+        const lastWateredDate = new Date(lastWatered + "T00:00");
+        const nextWateringDate = addDays(lastWateredDate, parseInt(wateringFrequency));
+        nextWatering = format(nextWateringDate, 'yyyy-MM-dd');
+
         const newPlant = new Plant({
             name,
             lastWatered,
+            wateringFrequency,
+            nextWatering,
             user: req.user.id  // Associar planta ao usuário
         });
 
@@ -32,12 +39,16 @@ exports.createPlant = async (req, res) => {
 // Atualizar uma planta do usuário autenticado
 exports.updatePlant = async (req, res) => {
     const { id } = req.params;
-    const { name, lastWatered } = req.body;
+    const { name, lastWatered, wateringFrequency } = req.body;
 
     try {
+        const lastWateredDate = new Date(lastWatered + "T00:00");
+        const nextWateringDate = addDays(lastWateredDate, parseInt(wateringFrequency));
+        nextWatering = format(nextWateringDate, 'yyyy-MM-dd');
+
         const updatedPlant = await Plant.findOneAndUpdate(
             { _id: id, user: req.user.id },  // Verificar se a planta pertence ao usuário
-            { name, lastWatered },
+            { name, lastWatered, wateringFrequency, nextWatering },
             { new: true, runValidators: true }
         );
 
@@ -80,15 +91,5 @@ exports.getPlantsByName = async (req, res) => {
         res.json(plants);
     } catch (error) {
         res.status(500).json({ message: error.message });
-    }
-};
-
-
-exports.checkWatering = async (req, res) => {
-    try {
-        const plantsNeedingWater = await checkPlantsNeedingWatering();
-        res.json(plantsNeedingWater);
-    } catch (error) {
-        res.status(500).json({ message: 'Erro ao verificar plantas' });
     }
 };

@@ -12,13 +12,15 @@ const Header = () => {
     };
 
     return (
+        
         <header>
-            <nav>
+            <nav className='navbar navbar-expand-lg bg-body-tertiary'>
+            <div className='container container-flex'>
                 <ul>
                     <li><Link to="/">Home</Link></li>
                     {isAuthenticated ? (
                         <>
-                            <li><Link to="/dashboard">Dashboard</Link></li>
+                            <li className='btn'><Link to="/dashboard">Dashboard</Link></li>
                             <li><button onClick={handleLogout}>Logout</button></li>
                         </>
                     ) : (
@@ -28,8 +30,10 @@ const Header = () => {
                         </>
                     )}
                 </ul>
+                </div>
             </nav>
         </header>
+        
     );
 };
 

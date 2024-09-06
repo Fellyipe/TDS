@@ -18,9 +18,6 @@ router.delete('/:id', auth, plantController.deletePlant);
 // Rota para buscar plantas por nome
 router.get('/search', auth, plantController.getPlantsByName);
 
-// Rota para verificar plantas que precisam de rega
-router.get('/check-watering', atuh, plantController.checkWatering);
-
 module.exports = router;
 
 

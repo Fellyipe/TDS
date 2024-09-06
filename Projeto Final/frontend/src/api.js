@@ -26,8 +26,6 @@ export const fetchPlants = async () => {
 export const addPlant = async (plant) => {
     try {
         const token = localStorage.getItem('token');
-        console.log(localStorage.getItem('token'));
-
         const response = await axios.post(API_URL, plant, {
             headers: {
                 'x-auth-token': token,

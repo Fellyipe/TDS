@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const PlantSchema = new mongoose.Schema({
+const plantSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true
@@ -12,6 +12,9 @@ const PlantSchema = new mongoose.Schema({
     wateringFrequency: {
         type: Number,
         required: true
+    },
+    nextWatering: {
+        type: Date,
     },
     user: {
         type: mongoose.Schema.Types.ObjectId,

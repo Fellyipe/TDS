@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import PlantCard from '../components/PlantCard';
-import { fetchPlants, deletePlant } from '../api';
+import { fetchPlants, updatePlant, deletePlant } from '../api';
 import PlantForm from '../components/PlantForm';
+import Navbar from '../components/Navbar';
 
 function Dashboard() {
     const [plants, setPlants] = useState([]);
@@ -48,8 +49,19 @@ function Dashboard() {
         }
     };
 
+    // Função para registrar a rega
+    const handleWaterPlant = async (id, name, date, wateringFrequency) => {
+        try {
+            await updatePlant(id, { name:name, lastWatered: date, wateringFrequency: wateringFrequency });
+            loadPlants();
+        } catch (error) {
+            console.error('Erro ao atualizar data da rega:', error);
+        }
+    };
+
     return (
         <div className="dashboard">
+            <Navbar plants={plants}></Navbar>
             <h1>Suas Plantas</h1>
             <PlantForm 
                 onPlantAdded={handlePlantUpdated} 
@@ -59,12 +71,15 @@ function Dashboard() {
             <div className="plant-list">
                 {plants.map((plant) => (
                     <PlantCard 
-                        key={plant._id}  // Usando _id como chave
+                        key={plant._id}
                         id={plant._id}
                         name={plant.name}
                         lastWatered={plant.lastWatered}
+                        wateringFrequency={plant.wateringFrequency}
+                        nextWatering={plant.nextWatering}
                         onEdit={() => handleEditPlant(plant._id)}
                         onDelete={() => handleDeletePlant(plant._id)}
+                        onWaterPlant={handleWaterPlant}
                     />
                 ))}
             </div>
