@@ -1,13 +1,9 @@
-const mongoose = require('mongoose');
+const { Sequelize } = require('sequelize');
 
-const connectDB = async () => {
-    try {
-        const conn = await mongoose.connect('mongodb://localhost:27017/greenthumb');
-        console.log(`MongoDB conectado: ${conn.connection.host}`);
-    } catch (error) {
-        console.error(`Erro de conexão: ${error.message}`);
-        process.exit(1); // Encerra a aplicação em caso de erro
-    }
-};
+// Inicializa o Sequelize com SQLite
+const sequelize = new Sequelize({
+    dialect: 'sqlite',
+    storage: './database.sqlite'  // Onde o arquivo do banco de dados será armazenado
+});
 
-module.exports = connectDB;
+module.exports = sequelize;

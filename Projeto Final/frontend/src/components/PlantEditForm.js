@@ -8,7 +8,7 @@ const PlantEditForm = ({ plant, onSave, onCancel }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         const updatedPlant = { name, lastWatered };
-        await updatePlant(plant._id, updatedPlant);
+        await updatePlant(plant.id, updatedPlant);
         onSave();
     };
 

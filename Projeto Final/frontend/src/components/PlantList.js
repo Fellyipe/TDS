@@ -16,7 +16,7 @@ const PlantList = () => {
 
     const handleDelete = async (id) => {
         await deletePlant(id);
-        setPlants(plants.filter(plant => plant._id !== id));
+        setPlants(plants.filter(plant => plant.id !== id));
     };
 
     const handleEdit = (plant) => {
@@ -41,10 +41,10 @@ const PlantList = () => {
             ) : (
                 <ul>
                     {plants.map(plant => (
-                        <li key={plant._id}>
+                        <li key={plant.id}>
                             {plant.name} - Última rega: {new Date(plant.lastWatered).toLocaleDateString()}
                             <button onClick={() => handleEdit(plant)}>Editar</button>
-                            <button onClick={() => handleDelete(plant._id)}>Deletar</button>
+                            <button onClick={() => handleDelete(plant.id)}>Deletar</button>
                         </li>
                     ))}
                 </ul>
